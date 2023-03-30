@@ -24,7 +24,7 @@ int main()
     std::string activity;
     int weight;
     int phone_num;
-    int num_pets;
+    int num_pets = 0;
     int type;
     std::string typeCheck;
 
@@ -74,12 +74,11 @@ int main()
                 }
             }
         }
-    }
-    else
+    } else
     {
         std::cout << "add pet?\n";
         std::cin >> addPetCheck;
-        while(addPetCheck == 'y' || addPetCheck == 'Y')
+        while (addPetCheck == 'y' || addPetCheck == 'Y')
         {
 
             std::cout << "type? 1-Cat 2-Dog";
@@ -100,7 +99,8 @@ int main()
                 std::cin >> sound;
                 std::cout << "# of legs: \n";
                 std::cin >> num_of_legs;
-                new Cat(name, id, days_in_shelter, color, age, sound, num_of_legs);
+                shelter.add_pet(new Cat(name, id, days_in_shelter, color, age, sound, num_of_legs));
+                num_pets++;
             }
             if (type == 2)
             {
@@ -118,24 +118,46 @@ int main()
                 std::cin >> activity;
                 std::cout << "weight: \n";
                 std::cin >> weight;
-                new Dog(name, id, days_in_shelter, color, age, activity, weight);
+                shelter.add_pet(new Dog(name, id, days_in_shelter, color, age, activity, weight));
+                num_pets++;
             }
             std::cout << "add pet?\n";
             std::cin >> addPetCheck;
         }
 
     }
-    for (int i = 1; i < num_pets; ++i)
+
+    while (inputFile >> type >> name >> id >> days_in_shelter >> color
+                     >> age) //reads values from file to store into array of Pet[]
     {
-//        shelter.savePetLine(fileName, i);
+        if (type == 1)
+        {
+            shelter.add_pet(new Cat(name, id, days_in_shelter, color, age, sound, num_of_legs));
+        }
+        if (type == 2)
+        {
+            shelter.add_pet(new Dog(name, id, days_in_shelter, color, age, activity, weight));
+            num_pets++;
+        }
+    }
 
-        shelter.pet_roster[i]->getLegs();
+    outputFile.open(fileName);
+    for (int i = 0; i < num_pets; ++i)
+    {
 
+        shelter.pet_roster[i]->savePetLine(outputFile);
 
+        if (shelter.pet_roster[i]->getType() == 1)
+        {
+            shelter.pet_roster[i]->saveCatLine(outputFile);
+        }
+        if (shelter.pet_roster[i]->getType() == 2)
+        {
+            shelter.pet_roster[i]->saveDogLine(outputFile);
+        }
 
     }
     outputFile.close();
-
 
 
 };

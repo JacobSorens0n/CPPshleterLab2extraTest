@@ -53,16 +53,36 @@ public:
         delete adopters;
     };
 
-    void savePetLine(std::string fileName, int Num)
+    void savePetLine(std::ofstream &outputFile)
     {
-        std::ofstream outputFile;
-        outputFile.open(fileName);
-
-        outputFile << shelter.pet_roster[Num]->getType() << pet_roster[Num]->getName() << " "
-                   << pet_roster[Num]->getId() << " " << pet_roster[Num]->getDaysInShelter()
-                   << " " << pet_roster[Num]->getColor() << " " << pet_roster[Num]->getAge()
-                   << std::endl;
+        outputFile << getType() << " " << getName() << " " << getId() << " " << getDaysInShelter() << " " << getColor() << " " << getAge() << " ";
     };
+
+    void saveCatLine(std::ofstream &outputFile)
+    {
+        outputFile << getLegs() << " " << getSound() << std::endl;
+    };
+
+    void saveDogLine(std::ofstream &outputFile)
+    {
+        outputFile << getWeight() << " " << getActivity() << std::endl;
+    };
+
+
+    virtual std::string getSound()
+    {
+        return "generic pet sound";
+    }
+
+    virtual int getLegs() = 0;
+
+    virtual std::string getActivity()
+    {
+        return "generic pet sound";
+    }
+
+    virtual int getWeight() = 0;
+
 
     // Getters
     int getType() const
@@ -89,6 +109,7 @@ public:
     {
         return num_of_adopters;
     }
+
 
     int add_adopter(Adopter *adopter)
     {
@@ -122,6 +143,18 @@ public:
         this->weight = weight;
     }
 
+    std::string getActivity() override
+    { return activity; }
+
+    int getWeight() override
+    { return weight; }
+
+    std::string getSound() override
+    { return activity; }
+
+    int getLegs() override
+    { return weight; }
+
 private:
     std::string activity;
     double weight;
@@ -140,15 +173,17 @@ public:
     }
 
 
-    std::string getSound() const
+    std::string getActivity() override
     { return sound; }
 
-    void speak() {
-        std::cout << "I am a cat." << std::endl;
-    }
+    int getWeight() override
+    { return num_of_legs; }
+
+    std::string getSound() override
+    { return sound; }
+
     int getLegs() override
-    { std::cout << num_of_legs;
-        return num_of_legs; }
+    { return num_of_legs; }
 
 private:
     std::string sound;
@@ -201,19 +236,10 @@ public:
         }
     };
 
-    void print_roster() const
-    {
-//        std::cout << "Course Name: " << this->course_name << endl;
-//        std::cout << "Instructor: " << this->instructor->get_name() << endl;
-        for (int i = 0; i < this->num_of_pets; i++)
-        {
-//            this->pet_roster[i]->print();
-        }
-    }
-
 
     Pet **pet_roster;
 private:
+
     //dynamic array of pointers
     int num_of_pets;
     int capacity;
