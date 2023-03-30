@@ -6,6 +6,7 @@
 #define CPPSHLETERLAB2EXTRATEST_MAIN_H
 
 #include <string>
+#include <iostream>
 
 const int max_pets = 10;
 const int max_adopters = 3;
@@ -14,21 +15,23 @@ const int max_adopters = 3;
 class Adopter
 {
 public:
-    Adopter(std::string name, int phone_num);
+    Adopter(std::string name, int phone_num)
+            : name_(name), phone_num_(phone_num)
+    {}
 
     std::string get_name()
     {
-        return this->name;
+        return this->name_;
     }
 
     int get_phone_num()
     {
-        return this->phone_num;
+        return this->phone_num_;
     }
 
 private:
-    std::string name;
-    int phone_num;
+    std::string name_;
+    int phone_num_;
 };
 
 class Pet
@@ -48,6 +51,17 @@ public:
             delete adopters[i];
         }
         delete adopters;
+    };
+
+    void savePetLine(std::string fileName, int Num)
+    {
+        std::ofstream outputFile;
+        outputFile.open(fileName);
+
+        outputFile << shelter.pet_roster[Num]->getType() << pet_roster[Num]->getName() << " "
+                   << pet_roster[Num]->getId() << " " << pet_roster[Num]->getDaysInShelter()
+                   << " " << pet_roster[Num]->getColor() << " " << pet_roster[Num]->getAge()
+                   << std::endl;
     };
 
     // Getters
@@ -89,7 +103,7 @@ public:
 
 private:
     int type_;
-    Adopter** adopters;
+    Adopter **adopters;
     int num_of_adopters;
     std::string name_;
     int id_;
@@ -102,7 +116,7 @@ class Dog : public Pet
 {
 public:
     Dog(std::string name, int id, int days_in_shelter, std::string color, int age, std::string activity, double weight)
-            : Pet(name, id, days_in_shelter, color, age)
+            : Pet(2, name, id, days_in_shelter, color, age)
     {
         this->activity = activity;
         this->weight = weight;
@@ -118,19 +132,28 @@ class Cat : public Pet
 {
 public:
     Cat(std::string name, int id, int days_in_shelter, std::string color, int age, std::string sound, int num_of_legs)
-            : Pet(name, id, days_in_shelter, color, age)
+            : Pet(1, name, id, days_in_shelter, color, age)
     {
         this->sound = sound;
         this->num_of_legs = num_of_legs;
+
     }
+
+
+    std::string getSound() const
+    { return sound; }
+
+    void speak() {
+        std::cout << "I am a cat." << std::endl;
+    }
+    int getLegs() override
+    { std::cout << num_of_legs;
+        return num_of_legs; }
 
 private:
     std::string sound;
     int num_of_legs;
 };
-
-
-
 
 
 class Shelter
@@ -188,11 +211,14 @@ public:
         }
     }
 
+
+    Pet **pet_roster;
 private:
-    Pet **pet_roster; //dynamic array of pointers
+    //dynamic array of pointers
     int num_of_pets;
     int capacity;
 
 };
+
 
 #endif //CPPSHLETERLAB2EXTRATEST_MAIN_H
