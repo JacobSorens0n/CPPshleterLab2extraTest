@@ -19,15 +19,12 @@ public:
             : name_(name), phone_num_(phone_num)
     {}
 
-    std::string get_name()
-    {
-        return this->name_;
-    }
+    std::string get_adopt_name()
+    { return this->name_; }
 
     int get_phone_num()
-    {
-        return this->phone_num_;
-    }
+    { return this->phone_num_; }
+
 
 private:
     std::string name_;
@@ -36,22 +33,29 @@ private:
 
 class Pet
 {
+
+
 public:
     Pet(int type, std::string name, int id, int days_in_shelter, std::string color, int age)
             : type_(type), name_(name), id_(id), days_in_shelter_(days_in_shelter), color_(color), age_(age)
     {
         this->adopters = new Adopter *[max_adopters];
-        num_of_adopters = 0;
+        for (int i = 0; i < max_adopters; i++){
+            this->adopters[i] = nullptr;
+        }
+        this->num_of_adopters = 0;
     }
+
+
 
     ~Pet()
     {
-        for (int i = 0; i < num_of_adopters; ++i)
+        for (int i = 0; i < get_num_of_adopters(); ++i)
         {
             delete adopters[i];
         }
-        delete adopters;
     };
+
 
     void savePetLine(std::ofstream &outputFile)
     {
@@ -97,6 +101,10 @@ public:
     int getId() const
     { return id_; }
 
+    void increaseDays()
+    {
+        days_in_shelter_++;
+    }
     int getDaysInShelter() const
     { return days_in_shelter_; }
 
@@ -106,32 +114,42 @@ public:
     int getAge() const
     { return age_; }
 
+
     int get_num_of_adopters() const
     {
         return num_of_adopters;
     }
 
 
-    int add_adopter(Adopter *adopter)
+    void add_adopter(Adopter* adopter)
     {
-        if (num_of_adopters >= max_adopters)
-        {
-            return 0;
-        }
+        std::cout << (num_of_adopters+1) << std::endl;
+
+
         adopters[num_of_adopters] = adopter;
         num_of_adopters++;
-        return 1;
     };
+
+
+    void saveAdopterLine(std::ofstream &outputFile, int index)
+    {
+
+        outputFile << 3 << " " << adopters[index]->get_adopt_name() << " " << adopters[index]->get_phone_num() << std::endl;
+
+    };
+
+    Adopter **adopters;
 
 private:
     int type_;
-    Adopter **adopters;
+
     int num_of_adopters;
     std::string name_;
     int id_;
     int days_in_shelter_;
     std::string color_;
     int age_;
+
 };
 
 class Dog : public Pet
@@ -226,7 +244,7 @@ public:
         {
             if (pet_roster[i]->getId() == id)
             {
-                std::cout << "deleting:" << pet_roster[i]->getName();
+                std::cout << "adopting:" << pet_roster[i]->getName();
                 delete pet_roster[i];
                 for (int j = i + 1; j < num_of_pets; ++j)
                 {
@@ -239,6 +257,7 @@ public:
 
 
     Pet **pet_roster;
+
 private:
 
     //dynamic array of pointers
