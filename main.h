@@ -55,17 +55,18 @@ public:
 
     void savePetLine(std::ofstream &outputFile)
     {
-        outputFile << getType() << " " << getName() << " " << getId() << " " << getDaysInShelter() << " " << getColor() << " " << getAge() << " ";
+        outputFile << getType() << " " << getName() << " " << getId() << " " << getDaysInShelter() << " " << getColor()
+                   << " " << getAge() << " ";
     };
 
     void saveCatLine(std::ofstream &outputFile)
     {
-        outputFile << getLegs() << " " << getSound() << std::endl;
+        outputFile << getSound() << " " << getLegs() << std::endl;
     };
 
     void saveDogLine(std::ofstream &outputFile)
     {
-        outputFile << getWeight() << " " << getActivity() << std::endl;
+        outputFile << getActivity() << " " << getWeight() << std::endl;
     };
 
 
