@@ -33,63 +33,73 @@ private:
 
 class Pet
 {
-
-
 public:
     Pet(int type, std::string name, int id, int days_in_shelter, std::string color, int age)
             : type_(type), name_(name), id_(id), days_in_shelter_(days_in_shelter), color_(color), age_(age)
     {
         this->adopters = new Adopter *[max_adopters];
-        for (int i = 0; i < max_adopters; i++){
+        for (int i = 0; i < max_adopters; i++)      //initializes all positions of adopters[] with null pointers cause there was some weird stuff happening without it
+        {
             this->adopters[i] = nullptr;
         }
         this->num_of_adopters = 0;
     }
 
 
-
     ~Pet()
     {
-        for (int i = 0; i < get_num_of_adopters(); ++i)
+        for (int i = 0; i < get_num_of_adopters(); ++i)     //should delete the adopters when the object is deleted
         {
             delete adopters[i];
         }
     };
 
 
-    void savePetLine(std::ofstream &outputFile)
+    void add_adopter(Adopter *adopter) //adds a new adopter with inputted info in array of adopters and increases # of adopters
+    {
+        adopters[num_of_adopters] = adopter;
+        num_of_adopters++;
+    };
+
+
+    void saveAdopterLine(std::ofstream &outputFile, int index)    //outputs data of adopter at index of array along with type for indentification when reading
+    {
+        outputFile << 3 << " " << adopters[index]->get_adopt_name() << " " << adopters[index]->get_phone_num()
+                   << std::endl;
+    };
+
+    void savePetLine(std::ofstream &outputFile)                 //outputs all info for Cat/Dog that belongs to the base class
     {
         outputFile << getType() << " " << getName() << " " << getId() << " " << getDaysInShelter() << " " << getColor()
                    << " " << getAge() << " ";
     };
 
-    void saveCatLine(std::ofstream &outputFile)
+    void saveCatLine(std::ofstream &outputFile)                 // outputs Cat specific info to file after Pet info
     {
         outputFile << getSound() << " " << getLegs() << std::endl;
     };
 
-    void saveDogLine(std::ofstream &outputFile)
+    void saveDogLine(std::ofstream &outputFile)                 // outputs Dog specific info to file after Pet info
     {
         outputFile << getActivity() << " " << getWeight() << std::endl;
     };
 
 
-    virtual std::string getSound()
+    virtual std::string getSound()             //calls this function from main and is overwritten by info from Cat class
     {
-        return "generic pet sound";
+        return "generic pet sound placeholder";
     }
 
-    virtual int getLegs() = 0;
+    virtual int getLegs() = 0;                 //calls this function from main and is overwritten by info from Cat class
 
-    virtual std::string getActivity()
+    virtual std::string getActivity()          //calls this function from main and is overwritten by info from Dog class
     {
-        return "generic pet sound";
+        return "activity placeholder";
     }
 
-    virtual int getWeight() = 0;
+    virtual int getWeight() = 0;               //calls this function from main and is overwritten by info from Dog class
 
 
-    // Getters
     int getType() const
     {
         return type_;
@@ -105,6 +115,7 @@ public:
     {
         days_in_shelter_++;
     }
+
     int getDaysInShelter() const
     { return days_in_shelter_; }
 
@@ -121,36 +132,18 @@ public:
     }
 
 
-    void add_adopter(Adopter* adopter)
-    {
-        std::cout << (num_of_adopters+1) << std::endl;
-
-
-        adopters[num_of_adopters] = adopter;
-        num_of_adopters++;
-    };
-
-
-    void saveAdopterLine(std::ofstream &outputFile, int index)
-    {
-
-        outputFile << 3 << " " << adopters[index]->get_adopt_name() << " " << adopters[index]->get_phone_num() << std::endl;
-
-    };
-
-    Adopter **adopters;
+    Adopter **adopters;//dynamic array of pointers
 
 private:
     int type_;
-
     int num_of_adopters;
     std::string name_;
     int id_;
     int days_in_shelter_;
     std::string color_;
     int age_;
-
 };
+
 
 class Dog : public Pet
 {
@@ -162,7 +155,7 @@ public:
         this->weight = weight;
     }
 
-    std::string getActivity() override
+    std::string getActivity() override //included the virtual functions from Dog as well because it complained otherwise, overwrites info from functions in Pet
     { return activity; }
 
     int getWeight() override
@@ -191,8 +184,7 @@ public:
 
     }
 
-
-    std::string getActivity() override
+    std::string getActivity() override //included the virtual functions from Cat as well because it complained otherwise, overwrites info from functions in Pet
     { return sound; }
 
     int getWeight() override
@@ -215,7 +207,6 @@ class Shelter
 public:
     Shelter(std::string name, int capacity)
     {
-
         this->pet_roster = new Pet *[capacity];
         this->num_of_pets = 0;
         this->capacity = capacity;
@@ -256,11 +247,9 @@ public:
     };
 
 
-    Pet **pet_roster;
+    Pet **pet_roster;//dynamic array of pointers
 
 private:
-
-    //dynamic array of pointers
     int num_of_pets;
     int capacity;
 
