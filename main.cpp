@@ -45,7 +45,7 @@ int main()
     while (runProgram == 'y' || runProgram == 'Y')    // repeats the entire program while the input is 'y' after stuff is outputted to file
     {
 
-        std::cout << "Do you have previous inventory? y/n \n";
+        std::cout << "Do you have previous inventory? (y/n) \n";
         std::cin >> previousInventory;
         std::cout << "Enter the name of the data file to analyze:\n";
         std::cin >> fileName;
@@ -81,12 +81,12 @@ int main()
             }
         }
 
-        std::cout << "add pet?\n";
+        std::cout << "add pet? (y/n)\n";
         std::cin >> addPetCheck;
         while (addPetCheck == 'y' || addPetCheck == 'Y') // repeats asking about adding pets while the input is 'y' after a pet is added
         {
 
-            std::cout << "type? 1-Cat 2-Dog";
+            std::cout << "type? 1-Cat 2-Dog: ";
             std::cin >> type;
             if (type == 1)      //manually make new Cat object that it passes to add_pet
             {
@@ -129,7 +129,7 @@ int main()
 
             for (int i = 0; i < 3; ++i) //asks 3(max_adopters) times to make new Adopter object that it passes to add_adopter
             {
-                std::cout << "add adopter?\n";
+                std::cout << "add adopter? (y/n)\n";
                 std::cin >> addAdopterCheck;
                 if (addAdopterCheck == 'y' || addAdopterCheck == 'Y')
                 {
@@ -140,7 +140,7 @@ int main()
                     shelter.pet_roster[num_pets - 1]->add_adopter(new Adopter(name, phone_num));
                 }
             }
-            std::cout << "add pet?\n";
+            std::cout << "add pet? (y/n)\n";
             std::cin >> addPetCheck;
         }
 
