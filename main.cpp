@@ -107,7 +107,7 @@ int main()
                 shelter.add_pet(new Cat(name, id, days_in_shelter, color, age, sound, num_of_legs));
                 num_pets++;
             }
-            if (type == 2) //manually make new Dog object that it passes to add_pet
+            if (type == 2)      //manually make new Dog object that it passes to add_pet
             {
                 std::cout << "name:\n";
                 std::cin >> name;

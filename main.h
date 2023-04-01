@@ -213,12 +213,7 @@ public:
     }
 
 
-    int get_num_of_pets() const
-    {
-        return num_of_pets;
-    }
-
-    int add_pet(Pet *pet)
+    int add_pet(Pet *pet)       //checks if pet_roster still has room, if yes adds Pet object to roster; if no, does nothing
     {
         if (num_of_pets >= capacity)
         {
@@ -229,7 +224,7 @@ public:
         return 1;
     };
 
-    void remove_pet(int id)
+    void remove_pet(int id)   //goes through all pets to match id, once id is found deltes that obect and shifts all other pets 1 space to make a continuous list
     {
         for (int i = 0; i < num_of_pets; ++i)
         {
